@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Для тебе</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#f8e7ee; --surface:#fff6f8; --ink:#3a0f2a; --muted:#7d4a65; --accent:#c2185b; --accent-ink:#fff;
+  --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#2a0a1e;--surface:#3d1230;--ink:#fbe4ee;--muted:#d6a3bd;--accent:#ff6b9a;--accent-ink:#2a0a1e;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#2a0a1e;--surface:#3d1230;--ink:#fbe4ee;--muted:#d6a3bd;--accent:#ff6b9a;--accent-ink:#2a0a1e;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
+main{max-width:560px;margin:0 auto;padding:0 24px}
+section{min-height:88vh;display:flex;flex-direction:column;justify-content:center;padding:56px 0}
+h1,h2{font-family:var(--serif);font-weight:600;font-style:italic;line-height:1.05;margin:0}
+h1{font-size:clamp(3.4rem,17vw,6.4rem);letter-spacing:-.01em;animation:rise 1.4s ease both}
+h2{font-size:clamp(2.2rem,9vw,3.2rem)}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.lead{font-size:1.1rem;color:var(--muted);max-width:34ch;margin:20px 0 0}
+.days{margin-top:40px;font-family:var(--serif);font-style:italic;font-size:1.6rem}
+.days b{font-size:3rem;font-weight:600;color:var(--accent);margin-right:.2em}
+button{font:inherit;cursor:pointer;border:0;border-radius:999px;padding:14px 28px;font-weight:600;background:var(--accent);color:var(--accent-ink);transition:transform .15s}
+button:active{transform:scale(.96)}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+button.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--muted)}
+.card{margin-top:28px;background:var(--surface);border-radius:28px 28px 28px 6px;padding:36px 28px;min-height:200px;display:flex;align-items:center;font-family:var(--serif);font-style:italic;font-size:clamp(1.6rem,6vw,2.1rem);line-height:1.25;cursor:pointer;-webkit-user-select:none;user-select:none}
+.card.flip{animation:flip .45s ease}
+@keyframes flip{from{opacity:0;transform:rotate(-2deg) translateY(10px)}to{opacity:1;transform:none}}
+.row{display:flex;align-items:center;justify-content:space-between;margin-top:20px;gap:16px}
+.dots{display:flex;gap:6px;flex-wrap:wrap}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--muted);opacity:.3}
+.dots i.on{background:var(--accent);opacity:1}
+.ask{position:relative;min-height:150px;margin-top:36px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+#no{transition:transform .25s ease}
+#yes-msg{display:none;margin-top:28px}
+#yes-msg.show{display:block;animation:rise .8s ease both}
+#yes-msg p{font-family:var(--serif);font-style:italic;font-size:1.8rem;margin:0 0 8px}
+#yes-msg small{color:var(--muted);font-size:1rem}
+.heart{position:fixed;pointer-events:none;font-size:26px;animation:up 2.2s ease-out forwards;z-index:5}
+@keyframes up{to{transform:translateY(-70vh) rotate(20deg);opacity:0}}
+#gate{position:fixed;top:0;right:0;bottom:0;left:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;padding-top:calc(24px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));text-align:center}
+#gate.hide{display:none}
+#gate h2{font-size:clamp(2.2rem,10vw,3.4rem)}
+#pw{font:inherit;font-size:1.2rem;text-align:center;padding:14px 20px;border-radius:999px;border:2px solid var(--muted);background:var(--surface);color:var(--ink);width:min(280px,100%)}
+#pw:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+#err{min-height:1.5em;color:var(--accent);margin:0}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+main{position:relative;z-index:1}
+#rain{position:fixed;top:0;right:0;bottom:0;left:0;pointer-events:none;overflow:hidden;z-index:0}
+.fall{position:absolute;top:-30px;opacity:.55;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(112vh) rotate(40deg)}}
+.pop{position:fixed;z-index:30;pointer-events:none;font-size:22px;margin:-12px 0 0 -12px;animation:pop .9s ease-out forwards}
+@keyframes pop{to{transform:translateY(-50px) scale(1.5);opacity:0}}
+.catbtn{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:6;width:58px;height:58px;padding:0;font-size:32px;line-height:1;background:var(--surface);box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.catbtn.wig{animation:wig .5s}
+@keyframes wig{25%{transform:rotate(-14deg)}75%{transform:rotate(14deg)}}
+#bub{position:fixed;right:84px;bottom:calc(30px + env(safe-area-inset-bottom,0px));z-index:6;background:var(--surface);color:var(--ink);padding:8px 14px;border-radius:16px 16px 4px 16px;opacity:0;transition:opacity .3s;pointer-events:none;font-weight:600}
+#bub.on{opacity:1}
+@media (prefers-reduced-motion:reduce){.fall,.pop{display:none}}
+.letter{margin-top:14px;background:var(--surface);border-radius:20px;padding:0 22px}
+.letter summary{cursor:pointer;list-style:none;padding:18px 0;font-family:var(--serif);font-style:italic;font-size:1.5rem;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.letter summary::-webkit-details-marker{display:none}
+.letter summary::after{content:"✉";font-style:normal;font-size:1.2rem;color:var(--accent)}
+.letter[open] summary::after{content:"💌"}
+.letter summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:12px}
+.letter p{margin:0 0 20px;color:var(--muted);animation:rise .5s ease both}
+@media (prefers-reduced-motion:reduce){.letter p,h1,.card.flip,#yes-msg.show{animation:none}.heart{display:none}}
+</style>
+</head>
+<body>
+<div id="gate">
+  <h2>Як ти мене називаєш?</h2>
+  <input id="pw" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" aria-label="Пароль" placeholder="Напиши це слово">
+  <button id="go">Увійти</button>
+  <p id="err" role="alert"></p>
+</div>
+<main>
+  <section>
+    <h1 id="title">Для тебе</h1>
+    <p class="lead" id="intro">Я зробив це місце лише для тебе. Тут небагато слів, але кожне — правда.</p>
+    <p class="days"><b id="n">0</b> <span id="dw">днів</span>, відколи ми разом</p>
+    <p class="lead" id="live"></p>
+  </section>
+
+  <section>
+    <h2>Чому я тебе люблю</h2>
+    <div class="card" id="card" role="button" tabindex="0" aria-live="polite"></div>
+    <div class="row">
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <button id="next">Ще одна причина</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Відкрий, коли…</h2>
+    <p class="lead">Листи на різні дні. Відкривай той, який саме зараз потрібен.</p>
+    <details class="letter"><summary>Коли тобі сумно</summary><p>Заплющ очі і згадай, як я дивлюся на тебе. Усе мине, а я буду поруч. Обіймаю тебе міцно, сонечко.</p></details>
+    <details class="letter"><summary>Коли ти скучила за мною</summary><p>Я теж скучив. Пиши, дзвони, не питай дозволу: я завжди радий тебе чути.</p></details>
+    <details class="letter"><summary>Коли не спиться</summary><p>Тихо. Ти в безпеці. Подумай про щось тепле, наприклад про наш наступний ранок разом. На добраніч, сонечко.</p></details>
+    <details class="letter"><summary>Коли сумніваєшся в собі</summary><p>Ти краща, ніж бачиш себе. Повір мені, я дивлюся уважно.</p></details>
+  </section>
+
+  <section>
+    <h2>Обійми на потім</h2>
+    <p class="lead">Натискай, коли захочеш. Я надішлю їх подумки.</p>
+    <button id="hug" style="align-self:flex-start;margin-top:24px">Обійняти</button>
+    <p class="lead" id="hugs" aria-live="polite"></p>
+  </section>
+
+  <section>
+    <h2>Дякую, що ти є, сонечко</h2>
+    <p class="lead">Це лише початок, і я дуже хочу, щоб попереду було ще багато днів.</p>
+  </section>
+</main>
+<div id="rain" aria-hidden="true"></div>
+<button id="cat" class="catbtn" aria-label="Котик">🐱</button>
+<span id="bub" aria-live="polite"></span>
+<script>
+// ===== Змініть тут: ім’я, дату, причини, побачення =====
+var CFG = {
+  name: "сонечко",
+  since: "2026-11-15",
+  date: "",
+  reasons: [
+    "Ти смієшся так, що мені одразу стає легше.",
+    "Поруч із тобою навіть звичайний вівторок схожий на свято.",
+    "Ти памʼятаєш дрібниці, які я сам забуваю.",
+    "Ти сильніша, ніж думаєш, і добріша, ніж показуєш.",
+    "З тобою я хочу бути кращим."
+  ]
+};
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var gate=$("gate"), pw=$("pw");
+  try{ if(sessionStorage.getItem("ok")==="1") gate.classList.add("hide"); }catch(e){}
+  function tryPw(){
+    if(pw.value.toLowerCase().replace(/[^а-яґєіїь]/g,"")==="коть"){
+      gate.classList.add("hide");
+      try{sessionStorage.setItem("ok","1")}catch(e){}
+    } else {
+      $("err").textContent="Не те слово. Згадай, як ти мене кличеш.";
+      pw.classList.remove("shake"); void pw.offsetWidth; pw.classList.add("shake"); pw.select();
+    }
+  }
+  $("go").onclick=tryPw;
+  pw.onkeydown=function(e){if(e.key==="Enter")tryPw()};
+  $("title").textContent = "Привіт, " + CFG.name;
+  var days = Math.max(0, Math.floor((Date.now()-new Date(CFG.since).getTime())/864e5));
+  $("n").textContent = days;
+  var d10=days%10, d100=days%100;
+  $("dw").textContent = (d10===1&&d100!==11) ? "день" : (d10>=2&&d10<=4&&(d100<12||d100>14)) ? "дні" : "днів";
+  function tick(){
+    var s=Math.max(0,Math.floor((Date.now()-new Date(CFG.since).getTime())/1000));
+    $("live").textContent="А якщо точніше: "+Math.floor(s/3600)+" год "+Math.floor(s%3600/60)+" хв "+(s%60)+" с";
+  }
+  tick(); setInterval(tick,1000);
+
+  var i=0, card=$("card"), dots=$("dots");
+  CFG.reasons.forEach(function(){dots.appendChild(document.createElement("i"))});
+  function show(){
+    card.classList.remove("flip"); void card.offsetWidth; card.classList.add("flip");
+    card.textContent = CFG.reasons[i];
+    Array.prototype.forEach.call(dots.children,function(d,k){d.classList.toggle("on",k<=i)});
+  }
+  function next(){i=(i+1)%CFG.reasons.length; show()}
+  show();
+  $("next").onclick=next; card.onclick=next;
+  card.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();next()}};
+
+  var calm=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches;
+  if(!calm){
+    var rain=$("rain"), fs=["💗","🤍","🌸","💕"];
+    setInterval(function(){
+      if(document.hidden) return;
+      var s=document.createElement("span"), d=7+Math.random()*5;
+      s.className="fall"; s.textContent=fs[Math.floor(Math.random()*fs.length)];
+      s.style.left=Math.random()*100+"vw"; s.style.fontSize=(14+Math.random()*14)+"px"; s.style.animationDuration=d+"s";
+      rain.appendChild(s); setTimeout(function(){s.remove()},d*1000);
+    },700);
+    document.addEventListener("pointerdown",function(e){
+      var p=document.createElement("span"); p.className="pop";
+      p.textContent=["✨","💗"][Math.floor(Math.random()*2)];
+      p.style.left=e.clientX+"px"; p.style.top=e.clientY+"px";
+      document.body.appendChild(p); setTimeout(function(){p.remove()},900);
+    });
+  }
+  var cm=["Мур-мур 💗","Мяу!","Гладь ще","Ти найкраща","Я теж тебе люблю"], ci=0, bub=$("bub"), cat=$("cat"), bt;
+  cat.onclick=function(){
+    bub.textContent=cm[ci++%cm.length]; bub.classList.add("on");
+    cat.classList.remove("wig"); void cat.offsetWidth; cat.classList.add("wig");
+    clearTimeout(bt); bt=setTimeout(function(){bub.classList.remove("on")},2200);
+  };
+  var hugs=0, hm=["Тримай, сонечко.","Ще міцніше.","Тепер вже точно все добре.","Я не відпускаю.","Скільки хочеш, стільки й буде."];
+  $("hug").onclick=function(){
+    hugs++;
+    $("hugs").textContent=hm[(hugs-1)%hm.length]+" Обіймів: "+hugs;
+    var set=["🤍","💗","🧸","✨"];
+    for(var k=0;k<10;k++){(function(k){setTimeout(function(){
+      var h=document.createElement("span"); h.className="heart"; h.textContent=set[k%set.length];
+      h.style.left=(10+Math.random()*80)+"vw"; h.style.bottom="-10px";
+      document.body.appendChild(h); setTimeout(function(){h.remove()},2300);
+    },k*70)})(k)}
+  };
+  var no=$("no"), tries=0;
+  if(!no) return;
+  function dodge(){
+    tries++;
+    var ask=$("ask").getBoundingClientRect(), b=no.getBoundingClientRect();
+    var dx=(Math.random()-.5)*Math.max(40,ask.width-b.width), dy=(Math.random()-.5)*110;
+    no.style.transform="translate("+dx+"px,"+dy+"px) scale("+Math.max(.5,1-tries*.08)+")";
+    if(tries>=5){no.textContent="Ну гаразд, так"; no.onclick=yes}
+  }
+  no.addEventListener("pointerenter",dodge);
+  no.addEventListener("touchstart",function(e){if(tries<5){e.preventDefault();dodge()}},{passive:false});
+  no.onclick=function(e){e.preventDefault();dodge()};
+
+  function yes(){
+    $("ask").style.display="none";
+    $("yes-msg").classList.add("show");
+    var set=["💗","💕","🌷","✨","💌"];
+    for(var k=0;k<24;k++){(function(k){setTimeout(function(){
+      var h=document.createElement("span"); h.className="heart";
+      h.textContent=set[k%set.length];
+      h.style.left=Math.random()*92+"vw"; h.style.bottom="-10px";
+      document.body.appendChild(h); setTimeout(function(){h.remove()},2300);
+    },k*90)})(k)}
+  }
+  $("yes").onclick=yes;
+})();
+</script>
+</body>
+</html>
